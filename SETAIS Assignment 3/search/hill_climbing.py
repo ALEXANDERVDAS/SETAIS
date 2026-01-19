@@ -61,7 +61,6 @@ def compute_objectives_from_time_series(time_series: List[Dict[str, Any]]) -> Di
     NOTE: If you want, you can add more objectives (lane-specific distances, time-to-crash, etc.)
     but keep the keys above at least.
     """
-    # TODO (students)
     lanes_changed = 0
     old_lane = time_series[0]["ego"]["lane_id"]
     has_crashed = 0
@@ -144,7 +143,7 @@ def compute_fitness(objectives: Dict[str, Any]) -> float:
     else:
         # return 50 - objectives["lanes_changed"]
         return objectives['min_distance']
-    # TODO (students)
+
     # raise NotImplementedError
 
 
@@ -313,7 +312,7 @@ def hill_climb(
     # seed = 1
     rng = np.random.default_rng(seed)
 
-    # TODO (students): choose initialization (base_cfg or random scenario)
+
     search = ScenarioSearch(env_id, base_cfg, param_spec, policy, defaults)
     # current_cfg = dict(base_cfg)
     current_cfg = ScenarioSearch.sample_random_config(search, rng)
@@ -371,7 +370,6 @@ def hill_climb(
         "best_ts": best_ts
     }
 
-    # TODO (students): implement HC loop
     # - generate neighbors
     # - evaluate
     # - pick best
