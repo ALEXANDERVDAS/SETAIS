@@ -79,7 +79,7 @@ def top5_predictions(model, image_array: np.ndarray) -> list:
 # ============================================================
 # 1. FITNESS FUNCTION
 # ============================================================
-#TODO: Alexander
+
 def compute_fitness(
     image_array: np.ndarray,
     model,
@@ -200,7 +200,6 @@ def mutate_seed(
 # 3. SELECT BEST CANDIDATE
 # ============================================================
 
-#TODO: Alexander
 def select_best(
     candidates: List[np.ndarray],
     model,
