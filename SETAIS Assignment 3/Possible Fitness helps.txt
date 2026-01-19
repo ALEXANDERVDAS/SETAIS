@@ -1,0 +1,3 @@
+Cars passed (ingehaald)
+Average speed. (Maybe max speed) # Cars go slower when changing lane it seems. Some cars have different speeds?
+Time till collision.
