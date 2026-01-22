@@ -66,6 +66,9 @@ def compute_objectives_from_time_series(time_series: List[Dict[str, Any]]) -> Di
     has_crashed = 0
     smallest_distance_total = float('inf')
     t_crashed = None
+    times_too_close = 0
+    dist_threshold = 4
+    dangerous = False
     for frame in time_series:
         # print(frame['crashed'])
 
@@ -92,8 +95,14 @@ def compute_objectives_from_time_series(time_series: List[Dict[str, Any]]) -> Di
             # distance = ((np.abs(other_position[0] - ego_position[0]) - ego['length']/2 - other['length']/2)**2 +
             #             (np.abs(other_position[1] - ego_position[1]) - ego['width']/2 - other['width']/2)**2)**0.5
             if ego['lane_id'] == other['lane_id']:
-                distance = (np.abs(other_position[0] - ego_position[0]) - ego['length']/2 - other['length']/2) # For some reason gives negative output sometimes... Should of crashed
-                # distance = (np.abs(other_position[0] - ego_position[0]))
+                distance = (
+                        np.abs(other_position[0] - ego_position[0])
+                        - ego['length']/2 - other['length']/2
+                )
+
+                # if distance is below the threshold -> label as dangerous
+                if 0 < np.abs(distance) < dist_threshold:
+                    dangerous = True
             else:
                 distance = float('inf')
             if distance < smallest_distance_frame:
@@ -106,14 +115,21 @@ def compute_objectives_from_time_series(time_series: List[Dict[str, Any]]) -> Di
         if smallest_distance_frame < smallest_distance_total:
             smallest_distance_total = smallest_distance_frame
 
+        # count #times the agent got too close to another car
+        if dangerous:
+            times_too_close += 1
+
     dictionary = dict(
         {
             "crash_count": has_crashed,
             "min_distance": smallest_distance_total,
             "t_crashed": t_crashed,
-            "lanes_changed": lanes_changed
+            "lanes_changed": lanes_changed,
+            "time_spent_too_close": times_too_close,
+            "episode_len": len(time_series)
         }
     )
+    print ("ALEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
     print(dictionary)
     return dictionary
 
@@ -142,7 +158,7 @@ def compute_fitness(objectives: Dict[str, Any]) -> float:
         return - (150/(objectives['t_crashed']+1))
     else:
         # return 50 - objectives["lanes_changed"]
-        return objectives['min_distance']
+        return (1 - objectives['time_spent_too_close'] / objectives['episode_len']) * 10
 
     # raise NotImplementedError
 
