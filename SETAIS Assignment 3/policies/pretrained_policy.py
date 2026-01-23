@@ -23,7 +23,7 @@ def load_pretrained_policy(model_path="model_final"):
     vecnorm.training = False
     vecnorm.norm_reward = False
 
-    model = PPO.load(model_path, device=device)
+    model = PPO.load(model_path, device="cpu")
 
     def policy(obs, info):
         # obs is single observation from Gymnasium, convert to batch
