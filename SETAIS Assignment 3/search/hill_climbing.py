@@ -143,22 +143,26 @@ def compute_fitness(objectives: Dict[str, Any]) -> float:
     """
     Convert objectives into ONE scalar fitness value to MINIMIZE.
 
-    Requirement:
-    - Any crashing scenario must be strictly better than any non-crashing scenario.
+    If no crash occurred, fitness is normalized to [0,1]
 
-    Examples:
-    - If crash_count==1: fitness = -1 (best)
-    - Else: fitness = min_distance (smaller is better)
-
-    You can design a more refined scalarization if desired.
+    Output:
+        - if crashed: - 1000 - time of crash
+        - else: 0.5 * (min distance / threshold for being too close) + 0.5 * (1 - fraction of time spent below distance threshold)
     """
 
     crashed = objectives['crash_count']
     if crashed == 1:
-        return - (150/(objectives['t_crashed']+1))
+        return -1000 - objectives['t_crashed']
     else:
-        # return 50 - objectives["lanes_changed"]
-        return (1 - objectives['time_spent_too_close'] / objectives['episode_len']) * 10
+        time_fraction = objectives['time_spent_too_close'] / objectives['episode_len']
+
+        dist_threshold = 4
+        min_distance = min(dist_threshold, objectives['min_distance'])
+
+        dist_fraction = min_distance / dist_threshold
+
+        fitness = 0.5 * dist_fraction + 0.5 * (1 - time_fraction)
+        return fitness
 
     # raise NotImplementedError
 
