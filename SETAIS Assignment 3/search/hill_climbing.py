@@ -129,7 +129,6 @@ def compute_objectives_from_time_series(time_series: List[Dict[str, Any]]) -> Di
             "episode_len": len(time_series)
         }
     )
-    print ("ALEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
     print(dictionary)
     return dictionary
 
