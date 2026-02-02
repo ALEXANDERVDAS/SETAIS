@@ -14,7 +14,7 @@ def main(onnx_path) -> pd.DataFrame:
     gender = "persoon_geslacht_vrouw"
 
 
-    data_path = "../data/investigation_train_large_checked.csv"
+    data_path = "data/investigation_train_large_checked.csv"
     # onnx_path = "model/gradient_boosting_model.onnx"
 
     print("Dataset:", data_path)
@@ -114,5 +114,7 @@ def main(onnx_path) -> pd.DataFrame:
     print(pd.DataFrame(rows))
     return pd.DataFrame(rows)
 
-onnx_path = "../good_model_tmp.onnx"
+onnx_path = "model/rf_good.onnx"
+print(main(onnx_path))
+onnx_path = "model/rf_bad.onnx"
 print(main(onnx_path))

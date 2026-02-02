@@ -151,4 +151,5 @@ def main(onnx_path: str = ONNX_PATH) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    main(onnx_path="model/good_model_tmp.onnx")
+    main(onnx_path="model/bad_model_tmp.onnx")
